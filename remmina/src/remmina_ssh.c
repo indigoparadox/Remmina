@@ -137,6 +137,7 @@ remmina_ssh_auth_password (RemminaSSH *ssh)
 	gint authlist;
 	gint n;
 	gint i;
+   gchar* prompt_words;
 
 	ret = SSH_AUTH_ERROR;
 	if (ssh->authenticated) return 1;
@@ -150,7 +151,16 @@ remmina_ssh_auth_password (RemminaSSH *ssh)
 			n = ssh_userauth_kbdint_getnprompts (ssh->session);
 			for (i = 0; i < n; i++)
 			{
-				ssh_userauth_kbdint_setanswer(ssh->session, i, ssh->password);
+            prompt_words = ssh_userauth_kbdint_getprompt (ssh->session, i, NULL);
+            g_print( "%s\n", prompt_words );
+            if (0 == g_strncasecmp (prompt_words, "Veri", 4) )
+            {
+               g_print( _("Using Google auth...") );
+               ssh_userauth_kbdint_setanswer(ssh->session, i, ssh->gauth);
+            } else {
+               g_print( _("Using password...") );
+               ssh_userauth_kbdint_setanswer(ssh->session, i, ssh->password);
+            }
 			}
 		}
 	}
