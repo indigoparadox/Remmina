@@ -82,7 +82,7 @@ remmina_plugin_ssh_main_thread (gpointer data)
 		/* Create SSH Shell connection based on existing SSH session */
 		shell = remmina_ssh_shell_new_from_ssh (ssh);
 		if (remmina_ssh_init_session (REMMINA_SSH (shell)) &&
-				remmina_ssh_auth (REMMINA_SSH (shell), NULL) > 0 &&
+				remmina_ssh_auth (REMMINA_SSH (shell), NULL, NULL) > 0 &&
 				remmina_ssh_shell_open (shell, (RemminaSSHExitFunc) remmina_plugin_service->protocol_plugin_close_connection, gp))
 		{
 			cont = TRUE;

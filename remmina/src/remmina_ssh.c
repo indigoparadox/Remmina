@@ -222,7 +222,7 @@ remmina_ssh_auth_auto_pubkey (RemminaSSH* ssh)
 }
 
 gint
-remmina_ssh_auth (RemminaSSH *ssh, const gchar *password)
+remmina_ssh_auth (RemminaSSH *ssh, const gchar *password, const gchar *gauth)
 {
 	/* Check known host again to ensure it's still the original server when user forks
 	 a new session from existing one */
@@ -236,6 +236,12 @@ remmina_ssh_auth (RemminaSSH *ssh, const gchar *password)
 	{
 		g_free(ssh->password);
 		ssh->password = g_strdup (password);
+	}
+
+	if (gauth)
+	{
+		g_free(ssh->gauth);
+		ssh->gauth = g_strdup (gauth);
 	}
 
 	switch (ssh->auth)
@@ -313,7 +319,7 @@ remmina_ssh_auth_gui (RemminaSSH *ssh, RemminaInitDialog *dialog, gboolean threa
 	}
 
 	/* Try empty password or existing password first */
-	ret = remmina_ssh_auth (ssh, NULL);
+	ret = remmina_ssh_auth (ssh, NULL, NULL);
 	if (ret > 0) return 1;
 
 	/* Requested for a non-empty password */
@@ -346,7 +352,7 @@ remmina_ssh_auth_gui (RemminaSSH *ssh, RemminaInitDialog *dialog, gboolean threa
 
 			if (ret != GTK_RESPONSE_OK) return -1;
 		}
-		ret = remmina_ssh_auth (ssh, dialog->password);
+		ret = remmina_ssh_auth (ssh, dialog->password, dialog->gauth_code);
 	}
 
 	if (ret <= 0)

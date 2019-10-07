@@ -188,6 +188,7 @@ gint remmina_init_dialog_authpwd(RemminaInitDialog *dialog, const gchar *label, 
 {
 	GtkGrid *table;
 	GtkWidget *password_entry;
+   GtkWidget *gauth_entry;
 	GtkWidget *save_password_check;
 	GtkWidget *widget;
 	gint ret;
@@ -217,11 +218,22 @@ gint remmina_init_dialog_authpwd(RemminaInitDialog *dialog, const gchar *label, 
 	gtk_entry_set_visibility(GTK_ENTRY(password_entry), FALSE);
 	gtk_entry_set_activates_default(GTK_ENTRY(password_entry), TRUE);
 
+	widget = gtk_label_new(_("Google auth code"));
+	gtk_misc_set_alignment(GTK_MISC(widget), 0.0, 0.5);
+	gtk_widget_show(widget);
+	gtk_grid_attach(GTK_GRID(table), widget, 0, 1, 1, 1);
+
+   gauth_entry = gtk_entry_new();
+	gtk_widget_show(gauth_entry);
+	gtk_grid_attach(GTK_GRID(table), gauth_entry, 1, 1, 2, 1);
+	gtk_entry_set_max_length(GTK_ENTRY(gauth_entry), 50);
+	gtk_entry_set_visibility(GTK_ENTRY(gauth_entry), FALSE);
+
 	s = g_strdup_printf(_("Save %s"), label);
 	save_password_check = gtk_check_button_new_with_label(s);
 	g_free(s);
 	gtk_widget_show(save_password_check);
-	gtk_grid_attach(GTK_GRID(table), save_password_check, 0, 1, 2, 1);
+	gtk_grid_attach(GTK_GRID(table), save_password_check, 0, 2, 2, 1);
 	if (allow_save)
 	{
 		if (dialog->save_password)
@@ -247,6 +259,7 @@ gint remmina_init_dialog_authpwd(RemminaInitDialog *dialog, const gchar *label, 
 	if (ret == GTK_RESPONSE_OK)
 	{
 		dialog->password = g_strdup(gtk_entry_get_text(GTK_ENTRY(password_entry)));
+		dialog->gauth_code = g_strdup(gtk_entry_get_text(GTK_ENTRY(gauth_entry)));
 		dialog->save_password = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(save_password_check));
 	}
 

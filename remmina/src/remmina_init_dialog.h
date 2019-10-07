@@ -69,6 +69,7 @@ typedef struct _RemminaInitDialog
 	gchar *username;
 	gchar *domain;
 	gchar *password;
+   gchar *gauth_code;
 	gboolean save_password;
 	gchar *cacert;
 	gchar *cacrl;
