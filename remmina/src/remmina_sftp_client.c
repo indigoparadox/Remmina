@@ -507,7 +507,7 @@ remmina_sftp_client_thread_main(gpointer data)
 		if (!sftp) {
 			sftp = remmina_sftp_new_from_ssh(REMMINA_SSH(client->sftp));
 			if (!remmina_ssh_init_session(REMMINA_SSH(sftp)) ||
-			    remmina_ssh_auth(REMMINA_SSH(sftp), NULL) <= 0 ||
+			    remmina_ssh_auth(REMMINA_SSH(sftp), NULL, NULL) <= 0 ||
 			    !remmina_sftp_open(sftp)) {
 				remmina_sftp_client_thread_set_error(client, task, (REMMINA_SSH(sftp))->error);
 				remmina_ftp_task_free(task);
@@ -974,7 +974,7 @@ remmina_sftp_client_new_init(RemminaSFTP *sftp)
 	gdk_flush();
 
 	if (!remmina_ssh_init_session(REMMINA_SSH(sftp)) ||
-	    remmina_ssh_auth(REMMINA_SSH(sftp), NULL) <= 0 ||
+	    remmina_ssh_auth(REMMINA_SSH(sftp), NULL, NULL) <= 0 ||
 	    !remmina_sftp_open(sftp)) {
 		dialog = gtk_message_dialog_new(GTK_WINDOW(gtk_widget_get_toplevel(client)),
 			GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,

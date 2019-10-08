@@ -297,7 +297,7 @@ remmina_ssh_auth_gssapi(RemminaSSH *ssh)
 }
 
 gint
-remmina_ssh_auth(RemminaSSH *ssh, const gchar *password)
+remmina_ssh_auth(RemminaSSH *ssh, const gchar *password, const gchar *gauth)
 {
 	TRACE_CALL(__func__);
 	gint method;
@@ -315,6 +315,12 @@ remmina_ssh_auth(RemminaSSH *ssh, const gchar *password)
 		g_free(ssh->passphrase);
 		ssh->password = g_strdup(password);
 		ssh->passphrase = g_strdup(password);
+	}
+
+	if (gauth)
+	{
+		g_free(ssh->gauth);
+		ssh->gauth = g_strdup (gauth);
 	}
 
 	/** @todo Here we should call
@@ -438,7 +444,7 @@ remmina_ssh_auth_gui(RemminaSSH *ssh, RemminaInitDialog *dialog, RemminaFile *re
 		return FALSE;
 	}
 	/* Try empty password or existing password/passphrase first */
-	ret = remmina_ssh_auth(ssh, remmina_file_get_string(remminafile, pwdtype));
+	ret = remmina_ssh_auth(ssh, remmina_file_get_string(remminafile, pwdtype), NULL);
 	if (ret > 0) return 1;
 
 	/* Requested for a non-empty password */
@@ -455,7 +461,7 @@ remmina_ssh_auth_gui(RemminaSSH *ssh, RemminaInitDialog *dialog, RemminaFile *re
 		}else  {
 			return -1;
 		}
-		ret = remmina_ssh_auth(ssh, dialog->password);
+		ret = remmina_ssh_auth(ssh, dialog->password, dialog->gauth_code);
 	}
 
 	if (ret <= 0) {

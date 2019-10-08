@@ -135,7 +135,7 @@ remmina_plugin_sftp_main_thread(gpointer data)
 		/* Create SFTP connection based on existing SSH session */
 		sftp = remmina_sftp_new_from_ssh(ssh);
 		if (remmina_ssh_init_session(REMMINA_SSH(sftp)) &&
-		    remmina_ssh_auth(REMMINA_SSH(sftp), NULL) > 0 &&
+		    remmina_ssh_auth(REMMINA_SSH(sftp), NULL, NULL) > 0 &&
 		    remmina_sftp_open(sftp)) {
 			cont = TRUE;
 		}
